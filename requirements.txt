@@ -1,0 +1,6 @@
+sentence-transformers
+chromadb
+Pillow
+numpy
+opencv-python
+ultralytics
