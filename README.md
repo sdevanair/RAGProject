@@ -195,6 +195,41 @@ The evaluation compares the top retrieved events with `object_class` labels
 from `data/events.json`. Its current all-car labels make it a small smoke
 check, not a balanced benchmark.
 
+### Latest verification (2026-10-24)
+
+| Check | Result |
+| --- | --- |
+| Automated tests (`python -m unittest discover -s tests -v`) | **20 passed, 0 failed** (0.578 seconds) |
+| Chroma index build (`python -m src.vector_store --db ./demo_chroma_db`) | **14 events indexed** with `clip-ViT-B-32` |
+| Retrieval smoke evaluation (`python -m src.evaluate_retrieval --db ./demo_chroma_db`) | **Hit@5: 3/3 (100%)**; mean top-result cosine similarity **0.2750** |
+
+The evaluation used three queries: “Show me cars detected in the video,”
+“Find a photograph of a car or other vehicle,” and “Which event images contain
+an automobile?” Each returned at least one `car` event in its top five. Since
+all 14 ground-truth events are labeled `car`, this is only a smoke evaluation,
+not evidence of balanced performance across object classes.
+
+The test run emits expected diagnostic output while checking a deliberately
+unreadable video and missing API-key handling. The index/evaluation commands
+also emitted a LibreSSL compatibility warning and a Transformers slow-image-
+processor notice; neither prevented the checks from completing.
+
+### Detection screenshot gallery
+
+These are the complete set of 14 annotated detection thumbnails currently
+checked into [`thumbnails/`](./thumbnails/). Each image is an event screenshot;
+timestamp, detected class, and confidence are from [`data/events.json`](./data/events.json).
+
+| Screenshot | Screenshot |
+| --- | --- |
+| <img src="thumbnails/evt_001.jpg" width="320" alt="Detection screenshot evt_001"><br>**evt_001** — car, 78.47%, 2026-10-14 21:55:58 | <img src="thumbnails/evt_002.jpg" width="320" alt="Detection screenshot evt_002"><br>**evt_002** — car, 74.57%, 2026-10-14 21:55:58 |
+| <img src="thumbnails/evt_003.jpg" width="320" alt="Detection screenshot evt_003"><br>**evt_003** — car, 69.57%, 2026-10-14 21:55:58 | <img src="thumbnails/evt_004.jpg" width="320" alt="Detection screenshot evt_004"><br>**evt_004** — car, 69.28%, 2026-10-14 21:55:58 |
+| <img src="thumbnails/evt_005.jpg" width="320" alt="Detection screenshot evt_005"><br>**evt_005** — car, 67.68%, 2026-10-14 21:55:58 | <img src="thumbnails/evt_006.jpg" width="320" alt="Detection screenshot evt_006"><br>**evt_006** — car, 67.42%, 2026-10-14 21:55:58 |
+| <img src="thumbnails/evt_007.jpg" width="320" alt="Detection screenshot evt_007"><br>**evt_007** — car, 66.79%, 2026-10-14 21:55:58 | <img src="thumbnails/evt_008.jpg" width="320" alt="Detection screenshot evt_008"><br>**evt_008** — car, 59.50%, 2026-10-14 21:55:58 |
+| <img src="thumbnails/evt_009.jpg" width="320" alt="Detection screenshot evt_009"><br>**evt_009** — car, 57.79%, 2026-10-14 21:55:58 | <img src="thumbnails/evt_010.jpg" width="320" alt="Detection screenshot evt_010"><br>**evt_010** — car, 53.45%, 2026-10-14 21:55:58 |
+| <img src="thumbnails/evt_011.jpg" width="320" alt="Detection screenshot evt_011"><br>**evt_011** — car, 52.75%, 2026-10-14 21:55:58 | <img src="thumbnails/evt_012.jpg" width="320" alt="Detection screenshot evt_012"><br>**evt_012** — car, 52.61%, 2026-10-14 21:55:58 |
+| <img src="thumbnails/evt_013.jpg" width="320" alt="Detection screenshot evt_013"><br>**evt_013** — car, 64.09%, 2026-10-14 21:55:59 | <img src="thumbnails/evt_014.jpg" width="320" alt="Detection screenshot evt_014"><br>**evt_014** — car, 63.50%, 2026-10-14 21:55:59 |
+
 ## Optional hosted OpenAI answers
 
 OpenAI is optional and may incur charges; the local Ollama mode is recommended
